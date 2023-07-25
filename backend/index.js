@@ -50,8 +50,11 @@ app.delete("/tasks/:id",(req, res)=>{
 app.put("/tasks/:id",(req, res)=>{
     const taskId = req.params.id;
     const q = "UPDATE tasks SET `done` = ? WHERE id = ?"
+    const values = [
+        req.body.done
+    ]
 
-    db.query(q,['done', taskId], (err,data)=>{
+    db.query(q,[values, taskId], (err,data)=>{
         if (err)  return res.json(err);
         return res.json("Task was updated");
     })

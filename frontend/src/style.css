@@ -58,7 +58,7 @@ h3{
     font-weight: bold;
     margin: 20px auto;
 }
-.delete ,  .update , .new{
+.delete ,  .update , .new, .update_new{
     border: 1px solid gray;
     padding: 10px 10px;
     border-radius: 10px;
@@ -70,6 +70,9 @@ h3{
 }
 .update{
     color: green; 
+}
+.update_new{
+    color: gray; 
 }
 .new > *{
     color: rgb(28, 159, 224); 
@@ -100,7 +103,7 @@ textarea{
 .formbutton{
     border: none;
     padding: 10px;
-    background-color: rgb(52, 68, 205);
+    background-color: gray;
     color: white;
     font-weight: bold;
     cursor: pointer;

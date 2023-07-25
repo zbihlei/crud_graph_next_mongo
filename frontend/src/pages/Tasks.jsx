@@ -25,9 +25,17 @@ const Tasks = () => {
             console.log(err);
         }
     }
-    const handleUpdate = async (id) =>{
+    const handleUpdateDone = async (id) =>{
+        let tskdone = {done: 'done'}
         try{
-            await axios.put("http://localhost:8800/tasks/"+ id);
+            await axios.put("http://localhost:8800/tasks/"+id, tskdone);
+        }catch(err){
+            console.log(err);
+        }
+    }
+    const handleUpdateNew = async (id) =>{
+        try{
+            await axios.put("http://localhost:8800/tasks/"+ id, null);
         }catch(err){
             console.log(err);
         }
@@ -52,7 +60,11 @@ const Tasks = () => {
                     <div className={task.done === 'done' ? 'status_done' : 'status'}><span>{task.done === null ? <div>new</div>: task.done}</span></div>
                     <div className="lower">
                         <button className='delete' onClick={()=>handleDelete(task.id)}>delete</button>
-                        <button className='update' onClick={()=>handleUpdate(task.id)}>mark as done</button>
+                        {task.done === null ? 
+                                                <button className='update' onClick={()=>handleUpdateDone(task.id)}>mark as done</button>
+                                                :
+                                                <button className='update_new' onClick={()=>handleUpdateNew(task.id)}>mark as new</button>
+                   }
                     </div>
                 </div>
             ))}
