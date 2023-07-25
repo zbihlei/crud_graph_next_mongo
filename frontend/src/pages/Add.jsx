@@ -5,20 +5,18 @@ import { useNavigate } from 'react-router-dom';
 
 const Add = () => {
 
-    const [book , setBook]=useState({
-        title: "",
-        description: "",
-        price: "",
-        cover: ""
+    const [task , setTask]=useState({
+        name: "",
+        title: ""
     });
     const navigate = useNavigate();
     const handleChange = (e)=>{
-        setBook(prev=> ({...prev, [e.target.name]: e.target.value}))
+        setTask(prev=> ({...prev, [e.target.name]: e.target.value}))
     }
     const handleClick = async e =>{
         e.preventDefault();
         try{
-            await axios.post("http://localhost:8800/books",  book);
+            await axios.post("http://localhost:8800/tasks",  task);
             navigate("/");
         }catch(err){
             console.log(err);
@@ -26,11 +24,9 @@ const Add = () => {
     }
       return (
     <div className='form'>
-        <h1>Add new book</h1>
-        <input type="text" placeholder='title' onChange={handleChange} name='title' />
-        <input type="text" placeholder='description' onChange={handleChange} name='description' />
-        <input type="number" placeholder='price'onChange={handleChange} name='price'/>
-        <input type="text" placeholder='cover' onChange={handleChange} name='cover'/>
+        <h1>Add new task</h1>
+        <input type="text" placeholder='task name' onChange={handleChange} name='name' />
+        <textarea rows="10" type="text" placeholder='task description' onChange={handleChange} name='title' />
         <button className='formbutton' onClick={handleClick}>Add</button>
     </div>
   )

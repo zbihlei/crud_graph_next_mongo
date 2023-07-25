@@ -7,7 +7,7 @@ const db =  mysql.createConnection({
     host: "localhost",
     user:  "root",
     password: "element1992",
-    database: "test"
+    database: "myTasks"
 })
 
 app.get("/", (req,res)=>{
@@ -16,53 +16,44 @@ app.get("/", (req,res)=>{
 app.use(express.json());
 app.use(cors());
 
-app.get("/books",(req,res)=>{
-    const q = "SELECT * FROM test.books";
+app.get("/tasks",(req,res)=>{
+    const q = "SELECT * FROM myTasks.tasks";
     db.query(q,(err,data)=>{
         if(err) return  res.json(err)
         return res.json(data);
     });
 });
 
-app.post("/books",(req,res)=>{
-    const q  =  "INSERT INTO books (`title`, `description`,`cover`,`price`) VALUES (?)"
+app.post("/tasks",(req,res)=>{
+    const q  =  "INSERT INTO tasks (`name`, `title`) VALUES (?)"
     const values = [
+        req.body.name,
         req.body.title,
-        req.body.description,
-        req.body.cover,
-        req.body.price
     ];
 
     db.query(q, [values], (err,data)=>{
         if (err) return res.json(err)
-        return res.json('book has been created!');
+        return res.json('task has been created!');
     });
 });
 
-app.delete("/books/:id",(req, res)=>{
-    const bookId = req.params.id;
-    const q = "DELETE FROM  books WHERE id = ?"
+app.delete("/tasks/:id",(req, res)=>{
+    const taskId = req.params.id;
+    const q = "DELETE FROM  tasks WHERE id = ?"
 
-    db.query(q,[bookId], (err,data)=>{
+    db.query(q,[taskId], (err,data)=>{
         if (err)  return res.json(err);
-        return res.json("Book was deleted");
+        return res.json("Task was deleted");
     })
 })
 
-app.put("/books/:id",(req, res)=>{
-    const bookId = req.params.id;
-    const q = "UPDATE books SET `title` = ?,`description` = ?,`cover` = ?,`price` = ? WHERE id = ?"
+app.put("/tasks/:id",(req, res)=>{
+    const taskId = req.params.id;
+    const q = "UPDATE tasks SET `done` = ? WHERE id = ?"
 
-    const values =  [
-        req.body.title,
-        req.body.description,
-        req.body.cover,
-        req.body.price
-    ]
-
-    db.query(q,[...values, bookId], (err,data)=>{
+    db.query(q,['done', taskId], (err,data)=>{
         if (err)  return res.json(err);
-        return res.json("Book was updated");
+        return res.json("Task was updated");
     })
 })
 
