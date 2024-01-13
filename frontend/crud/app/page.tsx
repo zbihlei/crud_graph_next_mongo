@@ -1,32 +1,69 @@
 "use client"
-import  { useEffect } from 'react'
-import { useState } from 'react';
+
 import Link from 'next/link';
+import { useQuery, useMutation } from '@apollo/client';
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+import {GET_TASKS} from './queries';
+import {DELETE_TASK} from './mutations';
+import {UPDATE_TASK_STATUS} from './mutations';
+
+if (process.env.NODE_ENV === 'development') { //dev mode only
+    loadDevMessages();
+    loadErrorMessages();
+  }
+
+interface Tasks {
+    tasks: Task[];
+} 
+
+  interface Task {
+    _id: string,
+    name: string,
+    description: string,
+    status: string
+  }
 
 const Tasks = () => {
 
-    const [tasks, setTasks] = useState([]);
-    // useEffect(()=>{
-    //     const fetchAllTasks = async ()=>{
-    //         try{
-    //             const res = await axios.get("http://localhost:8800/tasks");
-    //             setTasks(res.data);
-    //         }catch(err){
-    //             console.log(err);
-    //         }
-    //     }
-    //     fetchAllTasks();
-    // },[tasks]);
+    const { data } =  useQuery(GET_TASKS);
+    const firstKey = data ? Object.keys(data)[0] : null;
+    const list: Tasks = firstKey ? data[firstKey] : [];
 
-    const handleDelete = async  (id)=>{
+    const [deleteTask] = useMutation(DELETE_TASK);
+    const [updateTaskStatus] = useMutation(UPDATE_TASK_STATUS);
+
+
+    const handleDelete = async  (id: string)=>{
+      try {
+        const { data } = await deleteTask({
+          variables: {
+            id
+          },
+          refetchQueries: [{ query: GET_TASKS }],
+        });
     
+        console.log('task deleted successfully', data);
+    
+      } catch (error) {
+        console.error('Failed to delete task:', error);
+      } 
     }
-    const handleUpdateDone = async (id) =>{
-       
-    }
-    const handleUpdateNew = async (id) =>{
-      
-    }
+    const handleUpdate = async (id: string, newStatus: string) =>{
+      try {
+        const { data } = await updateTaskStatus({
+          variables: {
+            id,
+            newStatus
+          },
+          refetchQueries: [{ query: GET_TASKS }],
+        });
+    
+        console.log('task updated successfully', data);
+    
+      } catch (error) {
+        console.error('Failed to update task:', error);
+      } 
+    }   
    
 
   return (
@@ -37,20 +74,21 @@ const Tasks = () => {
         <h3>Mongo + GraphQL + Next</h3>
 
         <div className="tasks">
-            {tasks ? tasks.map(task=>(
+            {list ? 
+            list.map((task: Task, index: any)=>(
     
-                <div className="task" key = {task.id}>
+                <div className="task" key = {index}>
                     <div className="upper">
                         <div>{task.name}</div>
-                        <div>{task.title}</div>
+                        <div>{task.description}</div>
                     </div>
-                    <div className={task.done === 'done' ? 'status_done' : 'status'}><span>{task.done === null ? <div>new</div>: task.done}</span></div>
+                    <div className={task.status === 'done' ? 'status_done' : 'status'}><span>{task.status === null ? <div>new</div>: task.status}</span></div>
                     <div className="lower">
-                        <button className='delete' onClick={()=>handleDelete(task.id)}>delete</button>
-                        {task.done === null ? 
-                                                <button className='update' onClick={()=>handleUpdateDone(task.id)}>mark as done</button>
+                        <button className='delete' onClick={()=>handleDelete(task._id)}>delete</button>
+                        {task.status === 'new' ? 
+                                                <button className='update' onClick={()=>handleUpdate(task._id, 'done')}>mark as done</button>
                                                 :
-                                                <button className='update_new' onClick={()=>handleUpdateNew(task.id)}>mark as new</button>
+                                                <button className='update_new' onClick={()=>handleUpdate(task._id , 'new')}>mark as new</button>
                    }
                     </div>
                 </div>
@@ -59,6 +97,8 @@ const Tasks = () => {
 
         <button className='new'><Link href = "/add">Add new task</Link></button>
     </div>
+
+
   )
 }
 
