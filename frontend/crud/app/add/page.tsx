@@ -1,7 +1,6 @@
+"use client"
 import React from 'react'
 import { useState } from 'react'
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const Add = () => {
 
@@ -9,18 +8,12 @@ const Add = () => {
         name: "",
         title: ""
     });
-    const navigate = useNavigate();
     const handleChange = (e)=>{
         setTask(prev=> ({...prev, [e.target.name]: e.target.value}))
     }
     const handleClick = async e =>{
         e.preventDefault();
-        try{
-            await axios.post("http://localhost:8800/tasks",  task);
-            navigate("/");
-        }catch(err){
-            console.log(err);
-        }
+     
     }
       return (
     <div className='form'>

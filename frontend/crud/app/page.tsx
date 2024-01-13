@@ -1,44 +1,31 @@
-import React, { useEffect } from 'react'
+"use client"
+import  { useEffect } from 'react'
 import { useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const Tasks = () => {
 
     const [tasks, setTasks] = useState([]);
-    useEffect(()=>{
-        const fetchAllTasks = async ()=>{
-            try{
-                const res = await axios.get("http://localhost:8800/tasks");
-                setTasks(res.data);
-            }catch(err){
-                console.log(err);
-            }
-        }
-        fetchAllTasks();
-    },[tasks]);
+    // useEffect(()=>{
+    //     const fetchAllTasks = async ()=>{
+    //         try{
+    //             const res = await axios.get("http://localhost:8800/tasks");
+    //             setTasks(res.data);
+    //         }catch(err){
+    //             console.log(err);
+    //         }
+    //     }
+    //     fetchAllTasks();
+    // },[tasks]);
 
     const handleDelete = async  (id)=>{
-        try{
-            await axios.delete("http://localhost:8800/tasks/" +id)
-        }catch(err){
-            console.log(err);
-        }
+    
     }
     const handleUpdateDone = async (id) =>{
-        let tskdone = {done: 'done'}
-        try{
-            await axios.put("http://localhost:8800/tasks/"+id, tskdone);
-        }catch(err){
-            console.log(err);
-        }
+       
     }
     const handleUpdateNew = async (id) =>{
-        try{
-            await axios.put("http://localhost:8800/tasks/"+ id, null);
-        }catch(err){
-            console.log(err);
-        }
+      
     }
    
 
@@ -47,10 +34,10 @@ const Tasks = () => {
         <h1>
             CRUD TASKS
         </h1>
-        <h3>MySQL + React.js + Express</h3>
+        <h3>Mongo + GraphQL + Next</h3>
 
         <div className="tasks">
-            {tasks.map(task=>(
+            {tasks ? tasks.map(task=>(
     
                 <div className="task" key = {task.id}>
                     <div className="upper">
@@ -67,10 +54,10 @@ const Tasks = () => {
                    }
                     </div>
                 </div>
-            ))}
+            )) : null}
         </div>
 
-        <button className='new'><Link to = "/add">Add new task</Link></button>
+        <button className='new'><Link href = "/add">Add new task</Link></button>
     </div>
   )
 }
