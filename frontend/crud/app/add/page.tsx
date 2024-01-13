@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, {ChangeEvent} from 'react'
 import { useState } from 'react'
 import { useMutation } from '@apollo/client';
 import {CREATE_TASK} from '../mutations';
@@ -18,10 +18,10 @@ const Add = () => {
     });
 
 
-    const handleChange = (e)=>{
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
         setTask(prev=> ({...prev, [e.target.name]: e.target.value}))
     }
-    const handleClick = async (e) =>{
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault();
 
         const newTask = {
@@ -51,7 +51,7 @@ const Add = () => {
     <div className='form'>
         <h1>Add new task</h1>
         <input type="text" placeholder='task name' onChange={handleChange} name='name' />
-        <textarea rows="10" type="text" placeholder='task description' onChange={handleChange} name='description' />
+        <textarea rows={10}  placeholder='task description' onChange={handleChange} name='description' />
         <button className='formbutton' onClick={handleClick}>Add</button>
     </div>
   )

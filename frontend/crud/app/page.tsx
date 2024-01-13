@@ -12,9 +12,7 @@ if (process.env.NODE_ENV === 'development') { //dev mode only
     loadErrorMessages();
   }
 
-interface Tasks {
-    tasks: Task[];
-} 
+  interface Tasks extends Array<Task> {}
 
   interface Task {
     _id: string,
