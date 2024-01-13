@@ -1,66 +1,33 @@
-import express  from "express";
-import mysql  from "mysql";
-import cors from "cors";
-const app = express();
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import resolvers from './resolvers.js';
+import typeDefs from './typeDefs.js';
+import mongoose from 'mongoose';
 
-const db =  mysql.createConnection({
-    host: "localhost",
-    user:  "root",
-    password: "element1992",
-    database: "myTasks"
-})
+async function startServer() {
+  const app = express();
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
 
-app.get("/", (req,res)=>{
-    res.json('hello this is backend!');
-})
-app.use(express.json());
-app.use(cors());
+  await apolloServer.start();
 
-app.get("/tasks",(req,res)=>{
-    const q = "SELECT * FROM myTasks.tasks";
-    db.query(q,(err,data)=>{
-        if(err) return  res.json(err)
-        return res.json(data);
-    });
-});
+  apolloServer.applyMiddleware({ app: app });
 
-app.post("/tasks",(req,res)=>{
-    const q  =  "INSERT INTO tasks (`name`, `title`) VALUES (?)"
-    const values = [
-        req.body.name,
-        req.body.title,
-    ];
+  app.use((req, res) => {
+    res.send('hello from express apollo server');
+  });
 
-    db.query(q, [values], (err,data)=>{
-        if (err) return res.json(err)
-        return res.json('task has been created!');
-    });
-});
+  try {
+    await mongoose.connect('mongodb+srv://liiamnissen:1111@cluster0.rud9g1z.mongodb.net/crud');
+    console.log('mongoose connected');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  }
+  
 
-app.delete("/tasks/:id",(req, res)=>{
-    const taskId = req.params.id;
-    const q = "DELETE FROM  tasks WHERE id = ?"
+  app.listen(4000, () => console.log('server is running on port 4000'));
+}
 
-    db.query(q,[taskId], (err,data)=>{
-        if (err)  return res.json(err);
-        return res.json("Task was deleted");
-    })
-})
-
-app.put("/tasks/:id",(req, res)=>{
-    const taskId = req.params.id;
-    const q = "UPDATE tasks SET `done` = ? WHERE id = ?"
-    const values = [
-        req.body.done
-    ]
-
-    db.query(q,[values, taskId], (err,data)=>{
-        if (err)  return res.json(err);
-        return res.json("Task was updated");
-    })
-})
-
-app.listen(8800, ()=>{
-    console.log('connected to backend!')
-});
-
+startServer();
