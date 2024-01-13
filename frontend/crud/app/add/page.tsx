@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useMutation } from '@apollo/client';
 import {CREATE_TASK} from '../mutations';
 import { useRouter } from 'next/navigation';
+import {  GET_TASKS} from '../queries';
+
 
 const Add = () => {
 
@@ -31,6 +33,7 @@ const Add = () => {
               variables: {
                 input: {...newTask},
               },
+              refetchQueries: [{ query: GET_TASKS }],
             });
         
             console.log('task saved successfully:', data.createTask);

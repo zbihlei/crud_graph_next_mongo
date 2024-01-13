@@ -25,7 +25,7 @@ interface Tasks {
 
 const Tasks = () => {
 
-    const { data } =  useQuery(GET_TASKS);
+    const { data, loading } =  useQuery(GET_TASKS);
     const firstKey = data ? Object.keys(data)[0] : null;
     const list: Tasks = firstKey ? data[firstKey] : [];
 
@@ -67,20 +67,24 @@ const Tasks = () => {
    
 
   return (
-    <div>
+    <div className='wrapp'>
         <h1>
             CRUD TASKS
         </h1>
         <h3>Mongo + GraphQL + Next</h3>
 
         <div className="tasks">
-            {list ? 
+          {loading ? 
+          <div className='loading'>Loading...</div>
+          :
+        <>
+          {list ? 
             list.map((task: Task, index: any)=>(
     
                 <div className="task" key = {index}>
                     <div className="upper">
-                        <div>{task.name}</div>
-                        <div>{task.description}</div>
+                        <div className='name'>{task.name}</div>
+                        <div className='descr'>{task.description}</div>
                     </div>
                     <div className={task.status === 'done' ? 'status_done' : 'status'}><span>{task.status === null ? <div>new</div>: task.status}</span></div>
                     <div className="lower">
@@ -93,9 +97,15 @@ const Tasks = () => {
                     </div>
                 </div>
             )) : null}
-        </div>
 
-        <button className='new'><Link href = "/add">Add new task</Link></button>
+        </>  
+        }
+        </div>
+        {!loading ? 
+          <div className="newBtn">
+              <button className='new'><Link href = "/add">Add new task</Link></button>
+           </div>
+      : null}
     </div>
 
 
