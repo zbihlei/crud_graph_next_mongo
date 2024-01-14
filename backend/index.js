@@ -9,13 +9,13 @@ import cors from 'cors';
 
 async function startServer() {
   const app = express();
-  app.use(cors());
 
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
   });
   const dbConnection = process.env.dbConnection;
+
   await apolloServer.start();
 
   app.use(cors({
@@ -28,6 +28,7 @@ async function startServer() {
     methods: ["POST", "GET"],
     credentials: true
   }));
+
 
   apolloServer.applyMiddleware({ app: app });
 
