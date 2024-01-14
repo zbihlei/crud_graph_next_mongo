@@ -18,17 +18,19 @@ async function startServer() {
   await apolloServer.start();
 
   app.use(cors({
-    origin: "https://crud-frontend.vercel.app",
+    origin: "https://crud-frontend-peach.vercel.app",
     credentials: true
   }));
 
   app.options('*', cors({
-    origin: "https://crud-frontend.vercel.app",
+    origin: "https://crud-frontend-peach.vercel.app",
     methods: ["POST", "GET"],
     credentials: true
   }));
 
   apolloServer.applyMiddleware({ app: app });
+
+  app.use(express.json());
 
   app.use((req, res) => {
     res.send('hello from express apollo server');
