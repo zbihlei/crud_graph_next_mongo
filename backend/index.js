@@ -1,8 +1,11 @@
+import { config } from 'dotenv';
+config();
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import resolvers from './resolvers.js';
 import typeDefs from './typeDefs.js';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 async function startServer() {
   const app = express();
@@ -10,8 +13,20 @@ async function startServer() {
     typeDefs,
     resolvers,
   });
+  const dbConnection = process.env.dbConnection;
 
   await apolloServer.start();
+
+  app.use(cors({
+    origin: "https://crud-frontend.vercel.app",
+    credentials: true
+  }));
+
+  app.options('*', cors({
+    origin: "https://crud-frontend.vercel.app",
+    methods: ["POST", "GET"],
+    credentials: true
+  }));
 
   apolloServer.applyMiddleware({ app: app });
 
@@ -20,7 +35,7 @@ async function startServer() {
   });
 
   try {
-    await mongoose.connect('mongodb+srv://liiamnissen:1111@cluster0.rud9g1z.mongodb.net/crud');
+    await mongoose.connect(dbConnection);
     console.log('mongoose connected');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
