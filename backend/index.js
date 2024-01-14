@@ -17,16 +17,16 @@ async function startServer() {
 
   app.use(cors()); 
 
-  // app.use(cors({
-  //   origin: "https://crud-frontend-peach.vercel.app",
-  //   credentials: true
-  // }));
+  app.use(cors({
+    origin: "https://crud-frontend-peach.vercel.app",
+    credentials: true
+  }));
 
-  // app.options('*', cors({
-  //   origin: "https://crud-frontend-peach.vercel.app",
-  //   methods: ["POST", "GET"],
-  //   credentials: true
-  // }));
+  app.options('*', cors({
+    origin: "https://crud-frontend-peach.vercel.app",
+    methods: ["POST", "GET"],
+    credentials: true
+  }));
 
   await apolloServer.start();
 
