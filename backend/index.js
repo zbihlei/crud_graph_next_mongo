@@ -17,7 +17,7 @@ async function startServer() {
 
   app.use(cors({
     origin: "https://crud-frontend-peach.vercel.app",
-    credentials: true
+    credentials: false
   }));
 
   app.options('*', cors({
