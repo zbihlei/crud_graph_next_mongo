@@ -17,13 +17,6 @@ async function startServer() {
 
   await apolloServer.start();
 
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://crud-frontend-peach.vercel.app');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-  });
-
   app.use(cors({
     origin: "https://crud-frontend-peach.vercel.app",
     credentials: true
@@ -31,7 +24,7 @@ async function startServer() {
 
   app.options('*', cors({
     origin: "https://crud-frontend-peach.vercel.app",
-    methods: ["POST", "GET", "PUT", "DELETE"],
+    methods: ["POST", "GET"],
     credentials: true
   }));
 
