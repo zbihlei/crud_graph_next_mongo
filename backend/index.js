@@ -5,7 +5,6 @@ import { ApolloServer } from 'apollo-server-express';
 import resolvers from './resolvers.js';
 import typeDefs from './typeDefs.js';
 import mongoose from 'mongoose';
-import cors from 'cors';
 
 async function startServer() {
   const app = express();
@@ -15,18 +14,6 @@ async function startServer() {
   });
   const dbConnection = process.env.dbConnection;
   await apolloServer.start();
-
-  app.use(cors({
-    origin: "https://crud-frontend-peach.vercel.app",
-    credentials: true
-  }));
-
-  app.options('*', cors({
-    origin: "https://crud-frontend-peach.vercel.app",
-    methods: ["POST", "GET"],
-    credentials: true
-  }));
-
 
   apolloServer.applyMiddleware({ app: app });
 
