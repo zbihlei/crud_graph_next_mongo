@@ -10,6 +10,11 @@ import cors from 'cors';
 async function startServer() {
   const app = express();
 
+  app.use(cors({
+    origin: "https://crud-tau-azure.vercel.app",
+    credentials: true
+  }));
+
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -17,17 +22,6 @@ async function startServer() {
   const dbConnection = process.env.dbConnection;
 
   await apolloServer.start();
-
-  app.use(cors({
-    origin: "https://crud-frontend-peach.vercel.app",
-    credentials: true
-  }));
-
-  app.options('*', cors({
-    origin: "https://crud-frontend-peach.vercel.app",
-    methods: ["POST", "GET"],
-    credentials: true
-  }));
 
 
   apolloServer.applyMiddleware({ app: app });
