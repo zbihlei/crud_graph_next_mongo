@@ -31,7 +31,7 @@ async function startServer() {
 
   app.options('*', cors({
     origin: "https://crud-frontend-peach.vercel.app",
-    methods: ["POST", "GET"],
+    methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true
   }));
 
