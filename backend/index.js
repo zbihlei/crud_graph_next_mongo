@@ -15,8 +15,6 @@ async function startServer() {
   });
   const dbConnection = process.env.dbConnection;
 
-  await apolloServer.start();
-
   app.use(cors({
     origin: "https://crud-frontend-peach.vercel.app",
     credentials: true
@@ -27,6 +25,8 @@ async function startServer() {
     methods: ["POST", "GET"],
     credentials: true
   }));
+
+  await apolloServer.start();
 
   apolloServer.applyMiddleware({ app: app });
 
