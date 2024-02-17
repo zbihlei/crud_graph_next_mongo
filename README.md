@@ -20,7 +20,7 @@ List of requirements to run the project, for example:
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/zbihlei/magic8ball.git
+    git clone https://github.com/zbihlei/crud_graph_next_mongo.git
     ```
 
 2. Navigate to the project directory:
@@ -34,16 +34,15 @@ List of requirements to run the project, for example:
     ```bash
     npm install
     ```
-
 4. Run dev mode:
 
-    ```bash
+    ```
     cd frontend
     cd crud
     npm run dev
     ```
 
-       ```bash
+    ```
     cd backend
     npm run start
     ```
