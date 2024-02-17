@@ -11,7 +11,7 @@ async function startServer() {
   const app = express();
 
   app.use(cors({
-    origin: "https://crud-tau-azure.vercel.app",
+    origin: "http://localhost:3000",
     credentials: true
   }));
 
